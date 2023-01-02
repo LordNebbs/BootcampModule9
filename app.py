@@ -1,12 +1,21 @@
-from flask import Flask
+#import dependencies
+import datetime as dt
+import numpy as np
+import pandas as pd
 
-app = Flask(__name__)
+import sqlalchemy
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import session
+from sqlalchemy import create_engine, func
 
+#import Flask from sqlalchemy
+from flask import Flask, jsonify
 
-@app.route('/')
-def hello_world():
-    return "Hello World"
+#setup database. This allows us to access and query the database
+engine = create_engine("sqlite:///hawaii.sqlite")
+#generate clases to reflect the database
+Base = automap_base()
+Base.prepare(engine, reflect=True)
 
-@app.route('/GreenTea')
-def tuna():
-    return '<h2>Arizona Green Tea is my favorite drink<h2>'
+Measurement = Base.classes.measurement
+Station = Base.classes.station
