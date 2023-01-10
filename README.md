@@ -38,6 +38,7 @@ df.set_index(df['date'], inplace=True)
 # Use Pandas Plotting with Matplotlib to plot the data
 df.plot()
 ```
+- ![image](https://github.com/LordNebbs/BootcampModule7/blob/97a6a739d470cff38a49649ffe2158cd9dbf701d/Tables/retiring%20titles.png)
 
 This helps visualize that it rains fairly consistently with an average of 3" throughout the year with rates as high as 6+" around July and November. While this is helpful we have to remember this is a snapshot of just one year in a dataset of nine and need to consider that there may be outlier data in this set.
 
