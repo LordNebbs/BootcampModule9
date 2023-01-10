@@ -38,7 +38,7 @@ df.set_index(df['date'], inplace=True)
 # Use Pandas Plotting with Matplotlib to plot the data
 df.plot()
 ```
-- ![image](https://github.com/LordNebbs/BootcampModule7/blob/97a6a739d470cff38a49649ffe2158cd9dbf701d/Tables/retiring%20titles.png)
+- ![image](https://github.com/LordNebbs/BootcampModule9/blob/8ed0b8abaa01a566c76eeaf67600a7c66d0b35df/data/1yearprecip.png)
 
 This helps visualize that it rains fairly consistently with an average of 3" throughout the year with rates as high as 6+" around July and November. While this is helpful we have to remember this is a snapshot of just one year in a dataset of nine and need to consider that there may be outlier data in this set.
 
@@ -54,29 +54,71 @@ june_df = pd.DataFrame(results_june, columns=['June Temp', 'Date'])
 june_df.describe()
 
 ```
-We then use SQLite to right a query to 
+We then use SQLite to right a query to find the temperature ranges for June (show above) and repeating the process for Dec.
 
-3- *Retiring titles*
+- ![image](https://github.com/LordNebbs/BootcampModule9/blob/d5852dc4d59381ab1587479e512304e95e665cde/data/June%20Temps.png)
+![image](https://github.com/LordNebbs/BootcampModule9/blob/d5852dc4d59381ab1587479e512304e95e665cde/data/June%20Temps.png)
 
-- ![image](https://github.com/LordNebbs/BootcampModule7/blob/97a6a739d470cff38a49649ffe2158cd9dbf701d/Tables/retiring%20titles.png)
-
-This clearly shows that PH is going to need to hire agressively to fill the massive void of talent that is immenently coming. 
-
-4- *Mentorship eligibility*
-
--  Mentorship is a great way to help get the next generation up to speed and make sure that the talent and knowledge cultivated within the company is not lost. However when using a 10 year bufffer from the current retirement cutoff dates, on average accross the 72458, 3.2% per title are eligible to mentor younger employees. Assistant Engineers are the most covered with 7.15% coverage based on those leaving where Senior Engineers have 0.65% coverage.
-
-![image](https://github.com/LordNebbs/BootcampModule7/blob/main/Tables/Silver%20Exit.png)
-
--   The ammount of "Brain Drain" is staggering and a better mentoring program is needed and perhaps the criteria and the mapping of the mentoring program to the titles replaced, needs to be reviewed to match the demands at Pewlett Packard.
+From there we can see that even in the hottest and coldest months of the year the range of temperture never quite deviates far from 73 degrees. 
 
 
+3- Look for averages over the entire dataset
+
+```
+import datetime as dt
+import matplotlib.pyplot as plt
+
+# Calculate the date 5 years ago and pull datapoints for 5 years
+prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=(365*5))
+
+# Perform a query to retrieve the data and precipitation scores
+results = session.query(Measurement.date, Measurement.prcp).filter(Measurement.date >= prev_year).all()
+
+# Save the query results as a Pandas DataFrame and set the index to the date column
+df = pd.DataFrame(results, columns=['date','precipitation'])
+
+#format errors
+df['date'] = pd.to_datetime(df['date'], errors='coerce')
+
+# Extract the month from the date column and create a new column called month
+df['month'] = df['date'].dt.month
+
+# Group the data by month and compute the mean precipitation for each month
+monthly_mean = df.groupby('month')['precipitation'].mean()
+
+# Create an empty list to store the plot objects
+plots = []
+
+# Iterate over the months
+for month in monthly_mean.index:
+    # Filter the data for the current month
+    df_month = df.loc[df['month'] == month]
+    
+    # Compute the mean precipitation for the current month
+    mean_precipitation = df_month['precipitation'].mean()
+    
+    # Create a bar plot for the current month
+    plot = plt.bar(month, mean_precipitation)
+    
+    # Add the plot object to the list
+    plots.append(plot)
+
+    # Add a label to the x-axis
+    plt.xlabel('Month')
+
+    # Add a label to the y-axis
+    plt.ylabel('Precipitation (inches)')
+
+# Show the plot
+plt.show()
+```
+
+- ![image](https://github.com/LordNebbs/BootcampModule9/blob/fbd7635f23305c2a1eb60f63e68781c1c970e1d0/data/precip9year.png)
+
+Here we see that on any given day, we are averaging 1/4" of rain no atter what time of year it is and only really have to worry about rain being heavier in July-Novemeber. This supports the initial sample we took.
 # Summary:
 
--   Based on the results, PH is facing a crisis. If something is not done to address the massive workforce loss, whoever is left to fill in their shoes will not only be potentially understaffed, but unequipped to handle problems faced as the people who pioneered the departments are no longer available.
+-   Based on the results, the client should have no issues opening a beach shop if their only considersations is rain and the cold. 
 
 # Suggestions
-1- Retooling the milestone triggers for mentorship needs to be explored. Query and table to show the people ahead of retirement time so that the retirement date would match new people mentored or ready for work as per HR policies and goals. This way the retirement exit will not be as big.
-
-2- More titles that will retire can be eligible for mentorship. Direct quota increase or criterias that allow more retiring titles to be eligible for mentorship. 
-
+- Another consideration might be including census data for the beaches to see where opening on Oahu would be most cost effective. 
