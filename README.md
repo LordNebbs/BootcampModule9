@@ -57,7 +57,7 @@ june_df.describe()
 We then use SQLite to right a query to find the temperature ranges for June (show above) and repeating the process for Dec.
 
 - ![image](https://github.com/LordNebbs/BootcampModule9/blob/d5852dc4d59381ab1587479e512304e95e665cde/data/June%20Temps.png)
-![image](https://github.com/LordNebbs/BootcampModule9/blob/d5852dc4d59381ab1587479e512304e95e665cde/data/June%20Temps.png)
+![image](https://github.com/LordNebbs/BootcampModule9/blob/e7c85c4b57934d2d1b5f65a7607da17e540fed2b/data/Dec%20temps.png)
 
 From there we can see that even in the hottest and coldest months of the year the range of temperture never quite deviates far from 73 degrees. 
 
